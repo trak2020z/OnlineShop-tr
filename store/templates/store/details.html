@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div class="col-10 m-auto">
+    <div class="mt-5">
+        <div class="card">
+            <div class="card-header">
+                <h1 class="card-title text-center">{{product.name}}</h1>
+            </div>
+            <div class="card-body m-5">
+                <h3 class="card-subtitle">Type: {{product.category}}</h4>
+                <h5 class="card-text">Price: {{product.price}}</h6>
+                <h6>Description:</h6>
+                <div class="card-text">{{product.description}}</div>
+            </div>
+            <div class="card-footer">
+                <input class="btn btn-success" value="Add to cart" onclick="add_one({{product.id}}, 1)" />
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block javascript %}
+    <script src="{% static 'store/js/ajax_calls.js' %}"></script>
+{% endblock javascript %}

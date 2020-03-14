@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="row">
+    <!-- Side bar with categories -->
+    <div class="col-lg-3 col-md-6">
+        <!-- Side bar with categories-->
+        <h1 class="my-4 ml-5">Categories</h1>
+        <div class="list-group" style="width: 18rem">
+            <a href={% url 'store:list' %} class="list-group-item text-center">All</a>
+            {% for category in categories %}
+                <a href="{% url 'store:list' category %}" class="list-group-item text-center">{{category}}</a>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <!-- List of products -->
+    <div class="m-auto col-lg-9">
+        <div class="mt-5">
+            <div class="row">
+                {% for product in products %}
+                    <div class="col-lg-4 col-sm-8 mb-4">
+                        <div class="card" style="height: 12rem;">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <a href="{% url 'store:details' product.id %}">{{product.name}}</a>
+                                </h5>
+                                <h6 class="card-subtitle">{{product.category}}</h6>
+                                <p class="card-text">{{product.price}}&nbsp;$</p>
+                            </div>
+                            <div class="card-footer">
+                                <input type="button" class="card-link btn btn-success" onclick="add_one({{product.id}}, 1)" value="Add to cart" />
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+<div class="row mt-3">
+    <nav aria-label="..." class="m-auto">
+        <ul class="pagination">
+            {% if products.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1">First</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ products.previous_page_number }}">Previous</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">First</span>
+                </li>
+                <li class="page-item disabled">
+                    <span class="page-link">Previous</span>
+                </li>
+            {% endif %}
+                <li class="page-item active">
+                    <span class="page-link">
+                        {{ products.number }}
+                        <span class="sr-only">(current)</span>
+                    </span>
+                </li>
+            {% if products.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ products.next_page_number }}">Next</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ products.paginator.num_pages }}">Last</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">Next</span>
+                </li>
+                <li class="page-item disabled">
+                    <span class="page-link">Last</span>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+{% endblock content %}
+
+{% block javascript %}
+<script src="{% static 'store/js/ajax_calls.js' %}"></script>
+
+{% endblock javascript %}

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="mt-5"></div>
+<div class="col-md-6 m-auto">
+    <div class="card m-auto">
+        <div class="card-body">
+            <h3 class="card-title text-success">Order created successfully.</h3>
+            <p calss="card-text">
+                You can access your order information with code:
+            </p>
+            <h6>{{access_code}}</h6>
+            <p class="card-text">And at the following link: <a href="{% url 'transactions:order' access_code %}">here</a>.</p>
+            <p class="card-text">
+                Make sure you copied and saved it before you leave this site, 
+                otherwise you wont be able to access to view your order.
+                </p>
+        </div>
+    </div>
+</div>
+{% endblock content %}

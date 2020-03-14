@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="mt-5"></div>
+<div class="card md-4 m-auto" style="width: 25rem;">
+    <div class="card-body">
+        <form action="." method="POST">
+            {% csrf_token %}
+            <h5 class="card-title">Do you really want to delete this?</h5>
+            <button type="submit" class="btn btn-danger">Yes</button>
+            <a href="../../" class="btn btn-primary">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock content %}

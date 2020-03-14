@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<div class="mt-5"></div>
+<div class="row col-md-12 m-auto">
+    <div class="card col-lg-8">
+        <div class="card-body">
+            <h1 class="card-title">Welcome to TheBestShop.</h1>
+            <p class="card-text">You can buy fruits and vegetables here with shipping to your home.</p>
+        </div>
+    </div>
+    <div class="col-lg-1 mt-2"></div>
+    <div class="card col-lg-3">
+        <div class="card-body">
+            <h3 class="card-title">Enter your order code below.</h3>
+            <form method="GET", action="{% url 'transactions:find_order' %}">
+                <div class="form-group">
+                    <input class="form-control" name="access_code" value={{request.GET.access_code}}>
+                </div>
+                <button class="btn btn-primary col-md-12" type="submit">Search</Button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+
+{% block javascript %}
+
+{% endblock javascript %}
