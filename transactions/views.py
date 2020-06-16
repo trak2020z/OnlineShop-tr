@@ -80,6 +80,9 @@ class OrderEditView(UpdateView):
     
 # Składanie zamówienia
 def new_order(request): 
+    if not request.session['cart']:
+        return redirect('store:cart')
+
     if request.method == 'POST':
         form = OrderForm(request.POST)
         if form.is_valid():
@@ -89,9 +92,9 @@ def new_order(request):
             # Gdy nie jest zalogowany to brak usera w zamówieniu
             else:
                 order = form.save()
-            cart = request.session['cart']
 
             # Znajdź przedmioty z kosza na zakupy
+            cart = request.session['cart']
             ids = cart.keys()
             products = Product.objects.filter(id__in=ids)
 
@@ -104,14 +107,18 @@ def new_order(request):
                     amount=cart[str(product.id)]
                 )
                 total = total + (cart[str(product.id)] * product.price)
-            
             # Zaaktualizuj koszt całkowity zamówienia
             Order.objects.filter(id=order.id).update(total_price=total)
+
             # Wyczyść koszyk
             request.session['cart'] = {}
 
             # Strona z kodem zamówienia
-            return redirect('transactions:new_order_created', order.access_code)
+            return redirect('transactions:new_order_created', 
+                order.access_code)
+        else:
+            context = {'form': form}
+            return render(request, 'transactions/order_form.html', context) 
     
     # Wyswietlenie formularza
     form = OrderForm()

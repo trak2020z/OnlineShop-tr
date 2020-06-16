@@ -30,7 +30,12 @@ class TestModels(TestCase):
             CartLine(self.product2, 2),
             CartLine(self.product3, 1),
         ]
-        
+    
+    def test_Cart_add_product_to_cart(self):
+        cart = Cart()
+        cart.add_to_cart(self.product1, 1)
+
+        self.assertEquals(len(cart.lines), 1)
 
     def test_Cart_class_total_price(self):
         self.assertEquals(self.cart.total_price, 42.35)

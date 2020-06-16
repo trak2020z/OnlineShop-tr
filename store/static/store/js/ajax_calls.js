@@ -33,7 +33,14 @@ function set_amount(product_id, amount)
                 alert('Wrong data!')
             }
             else{
-                $("#price_"+product_id).html((amount * data.price).toFixed(2));
+                if(data.msg){
+                    alert(data.msg);
+                    amount = 100;
+                    $("#amount_"+product_id).val(amount);
+                }
+
+                $("#price_"+product_id).html(
+                    (amount * data.price).toFixed(2));
                 
                 var prices = $(".product-price");
                 var total = 0;

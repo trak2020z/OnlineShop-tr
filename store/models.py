@@ -8,7 +8,10 @@ class Product(models.Model):
     description = models.TextField(max_length=400)
     category = models.CharField(max_length=20)
     price = models.DecimalField(max_digits=5, decimal_places=2)
-    orders = models.ManyToManyField('transactions.Order', through='transactions.Ordered')
+    orders = models.ManyToManyField(
+        'transactions.Order', 
+        through='transactions.Ordered'
+    )
 
     def __str__(self):
         return self.name

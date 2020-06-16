@@ -70,7 +70,7 @@ def cart(request):
     page = request.GET.get('page')
     if not page:
         page=1
-    
+    print('items: {}'.format(items))
     paginator = Paginator(cart.lines, 10)
     total_price = cart.total_price
     cart = paginator.page(page)
@@ -105,7 +105,7 @@ def add_one(request):
 # Ustawienie ilości przedmiotów w koszyku
 # Wywołanie ajax
 # Wykonywane tylko w widoku koszyka na zakupy - "cart"
-def set_amount(request):
+def set_amount2(request):
     data = {
         'deleted': False,
         'price': -1
@@ -113,8 +113,17 @@ def set_amount(request):
     item = request.GET.get('item', None)
     try:
         amount = int(request.GET.get('amount', None))
-    except:
+        item = int(item)
+    except TypeError:
+        print('returning data: {}'.format(data))
         return JsonResponse(data)
+    if amount > 100:
+        amount = 100
+        data['msg'] = 'Amount set to 100 due to recieving to big value.'
+    
+    if not Product.objects.get(id=item):
+        return JsonResponse(data)
+
     try:
         cart = request.session['cart']
     except:
@@ -122,13 +131,60 @@ def set_amount(request):
     
     cart[item] = amount
     if cart[item] <= 0:
-        cart.pop(item)
+        print('delete product_id: {} from session cart'.format(item))
+        cart.pop(str(item))
         data['deleted'] = True
     else:
-        data['price'] = Product.objects.get(id=int(item)).price
-    print(cart)
+        data['price'] = Product.objects.get(id=item).price
+
+    print('session cart: {}'.format(cart))
     request.session['cart'] = cart
     return JsonResponse(data)
+
+def set_amount(request):
+    # Pobranie argumentów: item, amount i rzutowanie ich do int
+    try:
+        item = int(request.GET.get('item', None))
+        amount = int(request.GET.get('amount', None))
+    except ValueError: # Jak inny format niż int to błąd o złych danych
+        return JsonResponse({'price': -1})
+    
+    data = {}
+    # sprawdzanie poprawności argumentu amount
+    if amount > 100:
+        amount = 100
+        data['msg'] = 'Amount set to 100 due to recieving to big value.'
+    
+    # sprawdzenie czy produkt istnieje
+    try:
+        product = Product.objects.get(id=item)
+    except Product.DoesNotExist:
+        return JsonResponse({'price': -1})
+    
+    # pobranie koszyka na zakupy
+    cart = request.session.get('cart')
+    if not cart:
+        cart = {}
+    
+    # gdy amount <= 0 -> usuń produkt z koszyka
+    if amount <= 0:
+        cart.pop(str(item))
+        request.session['cart'] = cart
+        print('removing id: {} from {}'.format(item, cart))
+        return JsonResponse({'deleted': True})
+    
+    # dodanie produktu do koszyka
+    cart[str(item)] = amount 
+    request.session['cart'] = cart
+
+    # dane do odpowiedzi
+    data['price'] = product.price
+    return JsonResponse(data)
+    
+
+
+
+
 
 # Usuwanie przedkiotu z koszyka
 # Wywołanie ajax
