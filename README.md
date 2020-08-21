@@ -1,7 +1,5 @@
 # OnlineShop
 
-## Program nie jest skończony ale można go przeklikać
-## Został zrobiony w celu przypomnienia django
 
 ## Instalacja:
 - git clone url

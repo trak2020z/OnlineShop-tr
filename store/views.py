@@ -182,10 +182,6 @@ def set_amount(request):
     return JsonResponse(data)
     
 
-
-
-
-
 # Usuwanie przedkiotu z koszyka
 # Wywołanie ajax
 # Usuwa przedmiot - widok "cart" - przycisk "Remove"
