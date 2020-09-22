@@ -8,7 +8,7 @@ certifi==2019.9.11
 chardet==3.0.4
 colorama==0.4.1
 cycler==0.10.0
-Django==3.0.6
+Django==3.0.7
 django-crispy-forms==1.9.1
 django-html-sanitizer==0.1.5
 django-tinymce==3.0.2
